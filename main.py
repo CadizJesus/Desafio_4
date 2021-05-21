@@ -3,18 +3,19 @@ from data import Data
 
 class Neuron:
     previous_layer = []
-    previus_weights = []
+    previous_weights = []
     value = float()
     weight_updated = []
     next_layer = []
     
-    def __init__(self, previous_layer = None, previus_weights = None, value = None):
+    def __init__(self, previous_layer = None, previous_weights = None, value = None):
         self.previous_layer = previous_layer
-        self.previus_weights = previous_layer
-        if not value:
+        self.previous_weights = previous_weights
+        self.value = value
+        """if value:
             self.value = value
         else:
-            self.value = self.calculate_value()
+            self.value = self.calculate_value()"""
 
     def act_sigmoid(self):
         return 1/(1+np.exp(-self.value))
@@ -40,19 +41,20 @@ class Network:
         layer = []
         if not self.list_layers:
             layer = self.add_first_layer(row)
-        if len(self.list_layers) == 1:
-            for n in range(n_neuronas):
-                layer.append(Neuron(previus_weights = self.ini_weight(self.list_layers[0]), previous_layer = self.list_layers[0]))
         else:
-            for n in range(n_neuronas):
-                layer.append(Neuron(previus_weights = self.ini_weight(self.list_layers[-1]), previous_layer = self.list_layers[-1]))
+            if len(self.list_layers) == 1:
+                for n in range(n_neuronas):
+                    layer.append(Neuron(previous_weights = self.ini_weight(self.list_layers[0]), previous_layer = self.list_layers[0]))
+            else:
+                for n in range(n_neuronas):
+                    layer.append(Neuron(previous_weights = self.ini_weight(self.list_layers[-1]), previous_layer = self.list_layers[-1]))
 
-        self.list_layer.append(layer)
+        self.list_layers.append(layer)
 
     def add_first_layer(self, row):
         layer = []
         for i in range(len(row)):    
-            layer.append(Neuron(value = row[i]))
+            layer.append(Neuron())
         return layer
     
     def ini_weight(self, first_layer):
@@ -64,6 +66,40 @@ class Network:
 
         return random_weights
 
+    def create_network(self, input):
+        self.add_layer(len(input), input)
+        p=1
+        while((len(input)/(2**p))>3):
+            self.add_layer(int(len(input)/2**p),None)
+            p=p+1
+
+        self.add_layer(2,None)
+    
+    def predict(self, input):
+        for i in range(len(self.list_layers)):
+            if i == 0:
+                for j in range(len(input)):
+                    self.list_layers[0][j].value = input[j]
+            else:
+                for n in self.list_layers[i]:
+                    n.previous_layer = self.list_layers[i-1]
+                    n.value = n.calculate_value()
+        return self.list_layers[-1]
+            
+
 
 a = Network()
-a.add_layer(5,[1,2,3,4,5])
+a.create_network([1,2,3,4,5,6,7,8,9,10])
+a.predict([1,2,3,4,5,6,7,8,9,10])
+
+i=0
+for layer in a.list_layers:
+    print("=================layer=========")
+    for n in layer:
+        print("value: ",n.value)
+    if i!=0:
+        print("===========previous======layer=========")
+        for ne in (layer[0].previous_layer):
+            
+            print("value: ",ne.value)
+    i+=1
