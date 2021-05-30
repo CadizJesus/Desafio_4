@@ -116,14 +116,14 @@ class Network:
                     for k in range(len(self.list_layers[i][j].previous_weights)):
                         self.list_layers[i][j].previous_weights[k] = self.list_layers[i][j].previous_weights[k] - learning_rate*deltas[i][j]*self.list_layers[i-1][k].act_sigmoid()
      
-    def train(self, iter):
+    def train(self, iter,tlearn):
         for iterator in range(1,iter+1):
             print("      entrenando: ", iterator*100/iter,"%", end='\r')
             
             for i in range(self.data.X_train.shape[0]):
                 row = self.data.X_train[i]
                 self.predict(row)
-                self.calculate_new_weigth(0.5,self.data.y_train[i])
+                self.calculate_new_weigth(tlearn,self.data.y_train[i])
         print()   
 
     def test(self):
@@ -154,9 +154,12 @@ def menu_cli():
     
     iter = input("Ingrese el máximo de iteraciones(se recomienda 200 o 500): ")
     iter = int(iter)
+
+    tlearn = input("Ingrese tasa de entrenamiento(se recomienda 0.5): ")
+    tlearn = float(tlearn)
     nn = Network()
     nn.create_network(layers)
-    nn.train(iter)
+    nn.train(iter,tlearn)
     nn.test()
 
 if __name__ == "__main__":
