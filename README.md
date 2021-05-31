@@ -36,3 +36,7 @@ Estructura que almacena los datos del dataset divididos en datos de entrenamient
 ## Backpropagation
 
 Luego de una iteración a la red neuronal con una entrada se obtiene una salida, esta salida por lo general no representa la salida esperada de forma asegurada, esto debido a que la red neuronal solo tiene pesos asignados de forma aleatoria, por lo que, se obtiene un error el cual se va comparando con la salida deseada y se reajustan los pesos de la capa anterior para luego repetir el procedimiento hasta llegar a la primera capa y esto se repetiría tantas veces como se quiera, en el caso de este problema con 100 repeticiones se alcanzó un resultado aceptable.
+
+
+# https://drive.google.com/file/d/1dUac6aUahLMERRWH-9RPD4lDQKa5yHTC/view?usp=sharing
+
